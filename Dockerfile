@@ -1,8 +1,14 @@
 FROM botpress/server:12.30.7
-ENV BP_STUDIO_PORT=3000
-ENV BP_PORT=3000
-ENV PORT=3000
-ENV BP_HOST=0.0.0.0
-ENV EXTERNAL_URL=https://botpress-single-production.up.railway.app
+
+# Exponemos el puerto que Railway abrirá
 EXPOSE 3000
-CMD ["./bp"]
+
+# Forzamos el puerto que Botpress usa por defecto
+ENV PORT=3000
+ENV BP_PORT=3000
+
+# Copiamos un entry-point que redirige Studio al mismo puerto
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
